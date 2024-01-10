@@ -20,7 +20,7 @@ This web application allows users to explore and classify different terrains fro
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/Mahesh062003/terrain-classification-webapp.git
+   git clone https://github.com/Mahesh062003/Terrain_classification-using-ML.git
 
     ```
 1.Install the required Python packages:
