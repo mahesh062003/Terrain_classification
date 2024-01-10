@@ -13,6 +13,7 @@ This web application allows users to explore and classify different terrains fro
 - [File Structure](#file-structure)
 - [Screenshots](#screenshots)
 - [Contributing](#contributing)
+- [Dataset](#dataset)   
 
 ## Installation
 
@@ -71,3 +72,8 @@ The application uses a pre-trained CNN model for terrain classification. The mod
 
 ## Contributing 
 Feel free to contribute to the project. Create a fork, make your changes, and submit a pull request.
+
+## Dataset
+Find the dataset link below 
+
+  https://drive.google.com/drive/folders/1OOc-ceo7eF1stmN8JTUL4JNnnqNDklQ-?usp=drive_link
