@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en"
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terrain Classification</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Genos&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Teko:wght@300&display=swap');
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 50px;
+        }
+
+        h2 {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 60px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: right;
+            position: fixed;
+            width: 100%;
+            z-index: 1;
+            background-color: rgb(0, 0, 0, 0.7);
+        }
+
+        nav a {
+            color: rgb(255, 252, 252);
+            padding: 14px 20px;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            
+        }
+
+        nav a:hover {
+            color: lightblue;
+        }
+
+        .section {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .content {
+            color: #ffffff;
+            text-align: center;
+            z-index: 2;
+        }
+
+        #home {
+            background: url('./static/Landing Page.mp4') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Genos', sans-serif;
+            font-size: 100px;
+            text-align: center;
+            text-transform: capitalize;
+            letter-spacing: 20px;
+        }
+
+        #upload {
+            background: url('./static/Upload_.mp4') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        #info {
+            background: url('./static/Info.mp4') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        /* Add the style for the transparent box */
+        .info-box {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+
+        .file-display img {
+            max-width: 100%;
+            max-height: 200px; /* Set a fixed height for the displayed image */
+            margin-top: 10px;
+        }
+
+        button {
+            background-color: #000000;
+            color: #fff;
+            font-family: 'Teko', sans-serif;
+            font-size:20px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor:pointer;
+            display: inline-block;
+            justify-content:center;
+        }
+
+        button:hover {
+            background-color: #3498db;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        label.upload-btn {
+            background-color: #000000;
+            color: #fff;
+            font-family:'Genos', sans-serif;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor:pointer;
+            display: inline-block;
+            justify-content:center;
+        }
+
+        label.upload-btn:hover{
+            background-color:#3498db;
+            font-size:20px;
+        }
+
+        label.upload-btn::after {
+            content: 'Choose File';
+            margin-left: 10px;
+            font-family: 'Teko', sans-serif;
+            text-transform:uppercase;
+        }
+
+        p {
+            font-family:'Genos', sans-serif;
+            font-size: 25px;
+        }
+
+        footer{
+            background-color: #fff;
+            color: rgb(0,0,0);
+            text-align: center;
+            
+            border-radius: 10px;
+        }
+
+        @media screen and (max-width: 576px) {
+            h1 {
+                font-size: 24px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            nav a {
+                padding: 10px 8px;
+            }
+
+            .section {
+                height: auto;
+            }
+
+            video {
+                height: auto;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            #home,
+            #upload,
+            #info {
+                font-size: 30px;
+            }
+
+            .info-box {
+                padding: 8px;
+            }
+
+            p {
+                font-size: 16px;
+            }
+
+            button {
+                padding: 6px 12px;
+            }
+
+            label.upload-btn {
+                padding: 6px 12px;
+            }
+        }
+
+        @media screen and (min-width: 577px) and (max-width: 768px) {
+            h1 {
+                font-size: 28px;
+            }
+
+            h2 {
+                font-size: 22px;
+            }
+
+            nav a {
+                padding: 12px 16px;
+            }
+
+            .section {
+                height: auto;
+            }
+
+            video {
+                height: auto;
+            }
+
+            .content {
+                padding: 18px;
+            }
+
+            #home,
+            #upload,
+            #info {
+                font-size: 32px;
+            }
+
+            .info-box {
+                padding: 10px;
+            }
+
+            p {
+                font-size: 18px;
+                font-family:'Genos', sans-serif;
+            }
+
+            button {
+                padding: 8px 16px;
+            }
+
+            label.upload-btn {
+                padding: 8px 16px;
+            }
+        }
+    </style>
+
+    <script>
+        function displaySelectedFile(input) {
+            var fileDisplay = document.getElementById('file-display');
+
+            // Clear previous content
+            fileDisplay.innerHTML = '';
+
+            // Display the chosen file
+            if (input.files.length > 0) {
+                var file = input.files[0];
+
+                // Create an image element
+                var img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+
+                // Append the image to the file-display div
+                fileDisplay.appendChild(img);
+            }
+        }
+
+        document.getElementById('upload-form').addEventListener('submit', function (e) {
+            e.preventDefault();  // Prevent the default form submission
+
+            console.log('Form submission attempted');
+
+            var formData = new FormData(this);
+
+            // Using AJAX to handle form submission
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/#upload', true);
+
+            console.log('Sending form data to the server');
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    var data = JSON.parse(xhr.responseText);
+                    var predictedClass = data.predicted_class;
+
+                    console.log('Server response received:', data, predictedClass);
+
+                    // Create a new pop-up element
+                    var popup = document.createElement('div');
+                    popup.classList.add('popup');
+                    popup.innerHTML = '<p>Predicted terrain type: ' + predictedClass + '</p>';
+
+                    // Append the pop-up to the body
+                    document.body.appendChild(popup);
+
+                    // Remove the pop-up after a certain delay (e.g., 3 seconds)
+                    setTimeout(function () {
+                        document.body.removeChild(popup);
+                    }, 3000);
+                }
+            };
+
+            xhr.send(formData);
+
+            // Prevent the page from reloading or redirecting
+            return false;
+        });
+    </script>
+</head>
+
+<body>
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#upload">Upload</a>
+        <a href="#info">about</a>
+    </nav>
+
+    <div id="home" class="section">
+        <video autoplay muted loop>
+            <source src="./static/Landing Page.mp4" type="video/mp4">
+        </video>
+        <div class="content">
+            <h1>EXPLORE THE TERRAINS</h1>
+        </div>
+    </div>
+
+    <div id="upload" class="section">
+        <video autoplay muted loop>
+            <source src="./static/Upload_.mp4" type="video/mp4">
+        </video>
+        <div class="content">
+            <h1>UPLOAD PAGE</h1>
+            <form id="upload-form" action="/upload" method="post" enctype="multipart/form-data">
+                <label for="file-input" class="upload-btn"></label>
+                <input id="file-input" type="file" name="file" accept="image/*" required onchange="displaySelectedFile(this)">
+                <button type="submit">CHECK</button>
+            </form>
+            <div class="file-display" id="file-display"></div>
+            <div class="info-box">
+                {% if predicted_class %}
+                    <p>Predicted terrain type: {{ predicted_class }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div id="info" class="section">
+        <video autoplay muted loop>
+            <source src="./static/Info.mp4" type="video/mp4">
+        </video>
+        <div class="content">
+            <h1>ABOUT</h1>
+            <div class="info-box">
+                <p>Imagine you have a smart system that can identify different types of terrains from images – be it rocky mountains, sandy beaches, lush grasslands, or marshy wetlands.<br> This system is powered by a specialized model called a Convolutional Neural Network (CNN). <br>When you visit the user-friendly front end we've designed, you'll see an option to upload a picture of any terrain you're curious about.</p>
+                <p>This process is simple: just click the upload button, select an image, and let the magic happen. <br>In a matter of moments, the system will analyze the image and provide you with the classification result. <br>It will tell you if the terrain is rocky, sandy, grassy, or marshy. <br>Whether you're a nature enthusiast, an adventurer, or just someone curious about the world around you, this tool makes understanding and categorizing terrains accessible and fun.<br>So, go ahead, give it a try, and discover the wonders of terrain classification!</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy;2024-All rights reserved.</p>
+    </footer>
+</body>
+
+</html>
