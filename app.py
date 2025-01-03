@@ -7,7 +7,7 @@ from io import BytesIO
 app = Flask(__name__)
 
 # Load the pre-trained model
-model = load_model('./model/model.h5')  # Replace with the path to your saved model file
+model = load_model('model.h5')  # Replace with the path to your saved model file
 
 # Mapping of class indices to class names
 class_names = {0: 'grassy', 1: 'marshy', 2: 'rocky', 3: 'sandy'}  # Update with your class names
